@@ -1,0 +1,29 @@
+# project: cj9j9bnh97nd001893aa5m1xy
+# version: 4
+
+type User @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  email: String @isUnique
+  password: String
+  firstName: String
+  lastName: String
+}
+
+type File @model {
+  contentType: String!
+  createdAt: DateTime!
+  id: ID! @isUnique
+  name: String!
+  secret: String! @isUnique
+  size: Int!
+  updatedAt: DateTime!
+  url: String! @isUnique
+}
+
+type Workout @model {
+  id: ID! @isUnique
+  name: String!
+  steps: [String!]
+}
