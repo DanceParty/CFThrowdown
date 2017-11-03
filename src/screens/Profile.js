@@ -1,44 +1,71 @@
 import React from "react";
-import { View } from "react-native";
-import { Card, Button, Text } from "react-native-elements";
-import { NavigationActions } from 'react-navigation'
+import { Text, View } from "react-native";
+
+// apollo
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 
 // auth
 import { onSignOut } from '../utils/auth'
 
-const Profile = (props) => (
-  <View style={{ paddingVertical: 20 }}>
-    <Card title="John Doe">
-      <View
-        style={{
-          backgroundColor: "#bcbec1",
-          alignItems: "center",
-          justifyContent: "center",
-          width: 80,
-          height: 80,
-          borderRadius: 40,
-          alignSelf: "center",
-          marginBottom: 20
-        }}
-      >
-        <Text style={{ color: "white", fontSize: 28 }}>JD</Text>
-      </View>
-      <Button
-        backgroundColor="#03A9F4"
-        title="SIGN OUT"
-        onPress={() => {
-          onSignOut()
-          props.navigation.dispatch(NavigationActions.reset({
-            index: 0,
-            actions: [
-              NavigationActions.navigate({ routeName: 'SignedOutNav'})              
-            ]
-          }))
-          props.navigation.navigate("SignedOutNav")
-        }}
-      />
-    </Card>
-  </View>
-)
+// components 
+import ProfileCard from '../components/ProfileCard'
 
-export default Profile
+
+class Profile extends React.Component {
+  render() {
+    if (this.props.selectUserQuery.loading) {
+      return <Text>Loading Users...</Text>
+    }
+    if (this.props.selectUserQuery.error) {
+      return <Text>Error Querying Users: {this.props.allUsersQuery.error.message}</Text>
+    }
+    // currently signed in user
+    const user = this.props.selectUserQuery.User
+    return (
+      <View style={{ paddingVertical: 20 }}>
+        <ProfileCard user={user} />
+      </View>
+    )
+  }
+}
+
+// returns all users
+const ALL_USERS_QUERY = gql`
+  query AllUsersQuery {
+    allUsers {
+      id
+      firstName
+      lastName
+    }
+  }
+`
+
+// returns null for user
+const CURRENT_USER_QUERY = gql`
+  query CurrentUserQuery {
+    user {
+      id
+      firstName
+      lastName
+    }
+  }
+`
+
+// returns correct user
+const SELECT_USER_QUERY = gql`
+  query SelectUserQuery($screenProps: ID) {
+    User(id: $screenProps) {
+      id
+      firstName
+      lastName
+    }
+  }
+`
+
+const ProfileWithData = graphql(SELECT_USER_QUERY, {
+  name: 'selectUserQuery',
+  options: ({ screenProps }) => ({ variables: { screenProps } }),
+})(Profile)
+
+export default ProfileWithData

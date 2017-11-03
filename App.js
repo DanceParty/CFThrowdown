@@ -1,16 +1,39 @@
 import React from 'react';
-import { Alert, BackHandler, StyleSheet, Text, View } from 'react-native';
+import { Alert, AsyncStorage, BackHandler, StyleSheet, Text, View } from 'react-native';
 import { Constants } from 'expo'
 
 // apollo imports
 import { ApolloProvider } from 'react-apollo'
 import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
+import { createHttpLink  } from 'apollo-link-http'
+import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
+// constants
+import { GC_AUTH_TOKEN } from './src/utils/constants'
+
 // connect client to Apollo Server
+
+const httpLink = createHttpLink({
+  uri: '__SIMPLE_API_ENDPOINT__'
+})
+
+const authLink = setContext((_, { headers }) => {
+  let token = ''
+  AsyncStorage.getItem(GC_AUTH_TOKEN)
+    .then(res => {
+      return {
+        headers: {
+          ...headers,
+          authorization: res ? `Bearer ${res}` : null
+        }
+      }
+    })
+    .catch(err => console.log(err))
+})
+
 const client = new ApolloClient({
-  link: new HttpLink({ uri: '__API_ENDPOINT__' }),
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 })
 
@@ -30,21 +53,11 @@ export default class App extends React.Component {
     checkedSignIn: false,
   }
 
-  componentWillMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+  componentDidMount() {
     getUserId()
       .then(res => this.setState(() => ({ userId: res, checkedSignIn: true })))
       .catch(err => Alert.alert("Error", `${err}`))
   }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
-  }
-
-  handleBackPress() {
-    return false;
-  }
-
 
   render() {
     const { checkedSignIn, userId } = this.state
@@ -52,10 +65,11 @@ export default class App extends React.Component {
     if (!checkedSignIn) {
       return null
     }
+    console.log('App: userId', userId)
     const Layout = createRootNavigator(userId)
     return (
       <ApolloProvider client={client}>
-        <Layout />
+        <Layout screenProps={userId}/>
       </ApolloProvider>
     );
   }
