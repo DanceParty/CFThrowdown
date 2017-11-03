@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, ScrollView, View } from "react-native";
 
 // apollo
 import { graphql } from 'react-apollo';
@@ -13,6 +13,7 @@ import ProfileCard from '../components/ProfileCard'
 
 
 class Profile extends React.Component {
+
   render() {
     if (this.props.selectUserQuery.loading) {
       return <Text>Loading Users...</Text>
@@ -23,9 +24,11 @@ class Profile extends React.Component {
     // currently signed in user
     const user = this.props.selectUserQuery.User
     return (
-      <View style={{ paddingVertical: 20 }}>
-        <ProfileCard user={user} />
-      </View>
+      <ScrollView>
+        <View style={{ paddingVertical: 20 }}>
+          <ProfileCard user={user} />
+        </View>
+      </ScrollView>
     )
   }
 }
@@ -59,6 +62,9 @@ const SELECT_USER_QUERY = gql`
       id
       firstName
       lastName
+      division
+      role
+      email
     }
   }
 `

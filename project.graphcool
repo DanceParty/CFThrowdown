@@ -1,5 +1,5 @@
 # project: cj9j9bnh97nd001893aa5m1xy
-# version: 4
+# version: 6
 
 type User @model {
   id: ID! @isUnique
@@ -9,6 +9,7 @@ type User @model {
   password: String
   firstName: String
   lastName: String
+  division: String @defaultValue(value: "")
 }
 
 type File @model {
@@ -26,4 +27,5 @@ type Workout @model {
   id: ID! @isUnique
   name: String!
   steps: [String!]
+  division: String!
 }

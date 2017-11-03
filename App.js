@@ -15,7 +15,7 @@ import { GC_AUTH_TOKEN } from './src/utils/constants'
 // connect client to Apollo Server
 
 const httpLink = createHttpLink({
-  uri: '__SIMPLE_API_ENDPOINT__'
+  uri: '__ENDPOINT__'
 })
 
 const authLink = setContext((_, { headers }) => {
