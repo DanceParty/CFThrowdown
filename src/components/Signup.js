@@ -51,22 +51,27 @@ class Signup extends React.Component {
   }
 
   onSubmitSignup = async () => {
+    console.log(this.state.password, this.state.confirmPassword)
     if (this.state.password === this.state.confirmPassword) {
       const { firstName, lastName, email, password } = this.state
       console.log('** Creating User')
-      const result = await this.props.createUserMutation({
-        variables: {
-          firstName,
-          lastName,
-          email,
-          password
-        }
-      })
-      const id = result.data.signinUser.user.id
-      const token = result.data.signinUser.token
-      onSignIn(id, token)
-      console.log('** User created. Navigating to `Signed In`')
-      this.props.navigation.navigate("SignedInNav")
+      try {
+        const result = await this.props.createUserMutation({
+          variables: {
+            firstName,
+            lastName,
+            email,
+            password
+          }
+        })
+        const id = result.data.signinUser.user.id
+        const token = result.data.signinUser.token
+        onSignIn(id, token)
+        console.log('** User created. Navigating to `Signed In`')
+        this.props.navigation.navigate("SignedInNav")
+      } catch(e) {
+        console.log('Error:', e)
+      }
     } else {
       Alert.alert('Error:', 'Check that the passwords match and try again')
     }
@@ -94,13 +99,15 @@ class Signup extends React.Component {
         />
 
         <FormLabel>Password</FormLabel>
-        <FormInput 
+        <FormInput
+          secureTextEntry 
           placeholder="Password..." 
           onChangeText={this.handlePasswordChange}
         />
 
         <FormLabel>Confirm password</FormLabel>
-        <FormInput 
+        <FormInput
+          secureTextEntry 
           placeholder="Confirm password..."
           onChangeText={this.handlePasswordConfirmChange}  
         />
@@ -152,4 +159,9 @@ mutation CreateUserMutation($firstName: String!, $lastName: String!, $email: Str
 }
 `
 
-export default graphql(CREATE_USER_MUTATION, { name: 'createUserMutation' })(Signup)
+export default graphql(CREATE_USER_MUTATION, { 
+  name: 'createUserMutation',
+  options: {
+    errorPolicy: 'all'
+  }
+})(Signup)

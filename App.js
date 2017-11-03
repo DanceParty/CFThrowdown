@@ -10,7 +10,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 
 // connect client to Apollo Server
 const client = new ApolloClient({
-  link: new HttpLink({ uri: '__INSERT_SIMPLE_ENDPOINT_HERE__' }),
+  link: new HttpLink({ uri: '__API_ENDPOINT__' }),
   cache: new InMemoryCache()
 })
 
