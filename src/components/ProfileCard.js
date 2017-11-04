@@ -65,59 +65,65 @@ class Profile extends React.Component {
         <FormInput disabled value={this.props.user.lastName}/>
         <FormLabel>Division</FormLabel>
 
-        {/* IOS Only */}
         {
-          Platform.OS === 'ios' ? 
-
-          (
-            this.state.editDivision ? 
-              <View>
-              <Picker
-                selectedValue={this.state.selectedPickerValue}
-                onValueChange={(itemValue, itemIndex) => 
-                  this.setState(() => ({ selectedPickerValue: itemValue, editDivision: false }))
-                }
-              >
-                <Picker.Item label="(Select a Division)" value="" />
-                <Picker.Item label="RX" value="RX" />
-                <Picker.Item label="Scaled" value="Scaled" />
-                <Picker.Item label="Masters 35-39" value="Masters 35-39" />
-                <Picker.Item label="Masters 40-44" value="Masters 40-44" />
-                <Picker.Item label="Masters 45-49" value="Masters 45-49" />
-                <Picker.Item label="Masters 50-54" value="Masters 50-54" />
-                <Picker.Item label="Masters 55-59" value="Masters 55-59" />
-                <Picker.Item label="Masters 60+" value="Masters 60+" />
-              </Picker>
-            </View>
-          :
-            <View style={styles.iosDivision}>
-              <TouchableHighlight
-                onPress={() => this.setState(() => ({ editDivision: true }))}
-              >
-                <Text style={styles.linkText}>
-                  {this.state.selectedPickerValue ? this.state.selectedPickerValue : 'Select Division'}
-                </Text>
-              </TouchableHighlight>
-            </View>
-          )
-
-          :
-
-          <View>
-            <Picker
-              selectedValue={this.state.selectedPickerValue}
-              onValueChange={(itemValue, itemIndex) => this.setPickerValue(itemValue)}
-            >
-              <Picker.Item label="RX" value="RX" />
-              <Picker.Item label="Scaled" value="Scaled" />
-              <Picker.Item label="Masters 35-39" value="Masters 35-39" />
-              <Picker.Item label="Masters 40-44" value="Masters 40-44" />
-              <Picker.Item label="Masters 45-49" value="Masters 45-49" />
-              <Picker.Item label="Masters 50-54" value="Masters 50-54" />
-              <Picker.Item label="Masters 55-59" value="Masters 55-59" />
-              <Picker.Item label="Masters 60+" value="Masters 60+" />
-            </Picker>
-          </View>
+          (() => {
+            if (Platform.OS === 'ios') {
+              if (this.state.editDivision) {
+                return (
+                  <View>
+                    <Picker
+                      selectedValue={this.state.selectedPickerValue}
+                      onValueChange={(itemValue, itemIndex) => 
+                        this.setState(() => ({ selectedPickerValue: itemValue, editDivision: false }))
+                      }
+                    >
+                      <Picker.Item label="(Select a Division)" value="" />
+                      <Picker.Item label="RX" value="RX" />
+                      <Picker.Item label="Scaled" value="Scaled" />
+                      <Picker.Item label="Masters 35-39" value="Masters 35-39" />
+                      <Picker.Item label="Masters 40-44" value="Masters 40-44" />
+                      <Picker.Item label="Masters 45-49" value="Masters 45-49" />
+                      <Picker.Item label="Masters 50-54" value="Masters 50-54" />
+                      <Picker.Item label="Masters 55-59" value="Masters 55-59" />
+                      <Picker.Item label="Masters 60+" value="Masters 60+" />
+                    </Picker>
+                  </View>
+                )
+              } else {
+                return (
+                  <View style={styles.iosDivision}>
+                    <TouchableHighlight
+                      onPress={() => this.setState(() => ({ editDivision: true }))}
+                    >
+                      <Text style={styles.linkText}>
+                        {this.state.selectedPickerValue ? `${this.state.selectedPickerValue} (Click to edit)` : 'Select Division'}
+                      </Text>
+                    </TouchableHighlight>
+                  </View>
+                )
+              }
+            } else {
+              return (
+                <View>
+                  <Picker
+                    selectedValue={this.state.selectedPickerValue}
+                    onValueChange={(itemValue, itemIndex) => 
+                      this.setState(() => ({ selectedPickerValue: itemValue }))
+                    }
+                  >
+                    <Picker.Item label="RX" value="RX" />
+                    <Picker.Item label="Scaled" value="Scaled" />
+                    <Picker.Item label="Masters 35-39" value="Masters 35-39" />
+                    <Picker.Item label="Masters 40-44" value="Masters 40-44" />
+                    <Picker.Item label="Masters 45-49" value="Masters 45-49" />
+                    <Picker.Item label="Masters 50-54" value="Masters 50-54" />
+                    <Picker.Item label="Masters 55-59" value="Masters 55-59" />
+                    <Picker.Item label="Masters 60+" value="Masters 60+" />
+                  </Picker>
+                </View>
+              )
+            }
+          })
         }
 
         <FormLabel>Role</FormLabel>

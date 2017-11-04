@@ -37,7 +37,7 @@ export const SignedInNav = TabNavigator({
     navigationOptions: {
       tabBarLabel: 'Workouts',
       tabBarIcon: ({ tintColor }) => 
-        <MaterialCommunityIcons name="dumbbell" size={30} color="black" />
+        <MaterialCommunityIcons name="dumbbell" size={30} color={tintColor} />
     }
   },
   ProfileWithData: {
@@ -45,7 +45,7 @@ export const SignedInNav = TabNavigator({
     navigationOptions: {
       tabBarLabel: 'Profile',
       tabBarIcon: ({ tintColor }) =>
-        <MaterialCommunityIcons name="account" size={30} color="black" />
+        <MaterialCommunityIcons name="account" size={30} color={tintColor} />
     }
   }
 }, {
