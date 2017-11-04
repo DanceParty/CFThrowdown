@@ -5,9 +5,6 @@ import { Text, ScrollView, View } from "react-native";
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-// auth
-import { onSignOut } from '../utils/auth'
-
 // components 
 import ProfileCard from '../components/ProfileCard'
 
@@ -26,7 +23,7 @@ class Profile extends React.Component {
     return (
       <ScrollView>
         <View style={{ paddingVertical: 20 }}>
-          <ProfileCard user={user} />
+          <ProfileCard user={user} navigation={this.props.navigation} />
         </View>
       </ScrollView>
     )

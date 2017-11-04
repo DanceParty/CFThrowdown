@@ -4,6 +4,13 @@ import { Card, Button, FormInput, FormLabel } from "react-native-elements";
 import { NavigationActions } from 'react-navigation'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+// apollo
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+
+// auth
+import { onSignOut } from '../utils/auth'
+
 
 class Profile extends React.Component {
 
@@ -18,6 +25,18 @@ class Profile extends React.Component {
     })
   }
 
+  updateProfile = async () => {
+    const { selectedPickerValue } = this.state
+    const userId = this.props.user.id
+    await this.props.updateUserDivision({
+      variables: {
+        userId,
+        selectedPickerValue
+      },
+      // update workout's query here for new division
+    })
+  }
+
   render() {
     return (
       <Card>
@@ -25,13 +44,13 @@ class Profile extends React.Component {
           <TouchableHighlight
             onPress={() => {
               onSignOut()
-              props.navigation.dispatch(NavigationActions.reset({
+              this.props.navigation.dispatch(NavigationActions.reset({
                 index: 0,
                 actions: [
                   NavigationActions.navigate({ routeName: 'SignedOutNav'})              
                 ]
               }))
-              props.navigation.navigate("SignedOutNav")
+              this.props.navigation.navigate("SignedOutNav")
             }}
           >
             <MaterialCommunityIcons name="exit-to-app" size={30} color="#03A9F4" />
@@ -107,9 +126,7 @@ class Profile extends React.Component {
         <Button
           backgroundColor="#03A9F4"
           title="SAVE"
-          onPress={() => {
-            this.props.onSaveProfile(this.state.selectedPickerValue)
-          }}
+          onPress={this.updateProfile}
         />
         
       </Card>
@@ -133,9 +150,9 @@ const styles = StyleSheet.create({
   },
 })
 
-/*const UPDATE_USER_DIVISION = gql`
-  mutation UpdateUserDivision($id: ID, $division: String) {
-    updateUser(id: $screenProps, division: $division) {
+const UPDATE_USER_DIVISION = gql`
+  mutation UpdateUserDivision($userId: ID!, $selectedPickerValue: String) {
+    updateUser(id: $userId, division: $selectedPickerValue) {
       id
       firstName
       lastName
@@ -144,7 +161,9 @@ const styles = StyleSheet.create({
       division
     }
   }
-`*/
+`
 
 
-export default Profile
+export default graphql(UPDATE_USER_DIVISION, {
+  name: 'updateUserDivision'
+})(Profile)
