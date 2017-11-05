@@ -1,5 +1,5 @@
 import React from 'react'
-import { Picker, Platform, StyleSheet } from 'react-native'
+import { Picker, Platform, StyleSheet, View } from 'react-native'
 
 
 class ProfilePicker extends React.Component {
@@ -14,7 +14,7 @@ class ProfilePicker extends React.Component {
 
   render() {
     const { platform, editMode, pickerValue } = this.props
-    
+
     if (platform === 'ios' && editMode) {
 
       return (
@@ -53,6 +53,7 @@ class ProfilePicker extends React.Component {
       return (
         <View>
           <Picker
+            style={styles.androidPicker}
             selectedValue={pickerValue}
             onValueChange={(itemValue) => this.handlePickerChange(itemValue)}
           >
@@ -76,12 +77,17 @@ class ProfilePicker extends React.Component {
 const styles = StyleSheet.create({
   iosDivision: {
     flex: 1,
-    alignItem: 'center',
+    alignItems: 'center',
     paddingTop: 20,
     paddingBottom: 10,
   },
   linkText: {
     color: 'blue'
+  },
+  androidPicker: {
+    maxWidth: 490,
+    marginLeft: 10,
   }
 })
 
+export default ProfilePicker

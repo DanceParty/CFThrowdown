@@ -5,26 +5,19 @@ import { Text, ScrollView, View } from "react-native";
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-// components 
-import ProfileCard from '../components/ProfileCard'
+// container
+import ProfileContainerWithData from '../components/Profile/ProfileContainer'
 
 
 class Profile extends React.Component {
 
   render() {
-    if (this.props.selectUserQuery.loading) {
-      return <Text>Loading Users...</Text>
-    }
-    if (this.props.selectUserQuery.error) {
-      return <Text>Error Querying Users: {this.props.allUsersQuery.error.message}</Text>
-    }
-    // currently signed in user
-    const user = this.props.selectUserQuery.User
     return (
       <ScrollView>
-        <View style={{ paddingVertical: 20 }}>
-          <ProfileCard user={user} navigation={this.props.navigation} />
-        </View>
+        <ProfileContainerWithData
+          navigation={this.props.navigation}
+          userId={this.props.screenProps}
+        />
       </ScrollView>
     )
   }
@@ -71,4 +64,4 @@ const ProfileWithData = graphql(SELECT_USER_QUERY, {
   options: ({ screenProps }) => ({ variables: { screenProps } }),
 })(Profile)
 
-export default ProfileWithData
+export default Profile

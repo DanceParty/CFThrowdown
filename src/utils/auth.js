@@ -7,8 +7,14 @@ export const onSignIn = (id, token) => {
 }
 
 export const onSignOut = () => {
-  AsyncStorage.removeItem(GC_USER_ID)
-  AsyncStorage.removeItem(GC_AUTH_TOKEN)
+  const storageKeys = [GC_USER_ID, GC_AUTH_TOKEN]
+  return new Promise((resolve, reject) => {
+    AsyncStorage.multiRemove(keys)
+      .then(resolve(true))
+      .catch(err => {
+        console.log(err)
+      })
+  })
 }
 
 export const getUserId = () => {
@@ -23,4 +29,4 @@ export const getUserId = () => {
       })
       .catch(err => reject(err))
   })
-} 
+}

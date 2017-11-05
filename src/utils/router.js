@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import SignUp from '../screens/SignUp'
 import SignIn from '../screens/SignIn'
 import Workouts from '../screens/Workouts'
-import ProfileWithData from '../screens/Profile'
+import Profile from '../screens/Profile'
 
 export const SignedOutNav = StackNavigator({
   SignUp: {
@@ -36,12 +36,12 @@ export const SignedInNav = TabNavigator({
     screen: Workouts,
     navigationOptions: {
       tabBarLabel: 'Workouts',
-      tabBarIcon: ({ tintColor }) => 
+      tabBarIcon: ({ tintColor }) =>
         <MaterialCommunityIcons name="dumbbell" size={30} color={tintColor} />
     }
   },
-  ProfileWithData: {
-    screen: ProfileWithData,
+  Profile: {
+    screen: Profile,
     navigationOptions: {
       tabBarLabel: 'Profile',
       tabBarIcon: ({ tintColor }) =>

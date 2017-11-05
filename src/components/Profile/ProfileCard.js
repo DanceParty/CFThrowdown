@@ -7,20 +7,29 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 // components
 import ProfilePicker from './ProfilePicker'
 
-class Profile extends React.Component {
+class ProfileCard extends React.Component {
+
+  handleLogOut = () => {
+    this.props.handleLogOut()
+  }
+
+  handlePickerChange = (itemValue) => {
+    this.props.handlePickerChange(itemValue)
+  }
+
   render() {
     return (
 
       <Card>
         {/* Custom Card Title */}
-        <Text>
+        <View style={styles.titleContainer}>
           <Text style={styles.title}>Account</Text>
           <TouchableHighlight
-            onPress={this.props.handleLogOut}
+            onPress={this.handleLogOut}
           >
             <MaterialCommunityIcons name="exit-to-app" size={30} color="#03A9F4" />
           </TouchableHighlight>
-        </Text>
+        </View>
 
         {/* Account Form */}
         <FormLabel>Email</FormLabel>
@@ -34,12 +43,18 @@ class Profile extends React.Component {
         <FormLabel>Division</FormLabel>
 
         {/* Platform Specific Picker*/}
-        <ProfilePicker 
+        <ProfilePicker
           platform={Platform.OS}
           editMode={this.props.editMode}
-          pickerValue={this.props.user.division || ''}
-          handlePickerChange={this.props.handlePickerChange}
+          pickerValue={this.props.division || ''}
+          handlePickerChange={this.handlePickerChange}
           handlePickerOpen={this.props.handlePickerOpen}
+        />
+
+        <Button
+          backgroundColor="#03A9F4"
+          title="SAVE CHANGES"
+          onPress={this.props.onFormSubmit}
         />
 
       </Card>
@@ -50,7 +65,15 @@ class Profile extends React.Component {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 14,
+    fontSize: 20,
+    fontWeight: 'bold',
     alignItems: 'flex-start'
+  },
+  titleContainer: {
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   }
 })
+
+export default ProfileCard
